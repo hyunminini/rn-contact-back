@@ -17,4 +17,24 @@ public class ContactServiceImpl implements ContactService {
     public List<ContactDTO> allList(){
         return mapper.selectAll();
     }
+    @Override
+    public void contactInsert(ContactDTO contact) {
+        mapper.contactInsert(contact);
+    }
+    @Override
+    public void contactUpdate(ContactDTO contact) {
+        mapper.contactUpdate(contact);
+    }
+    @Override
+    public void contactDelete(ContactDTO contact) {
+        mapper.contactDelete(contact);
+    }
+    @Override
+    public void contactRestoration(ContactDTO contact) {
+        mapper.contactRestoration(contact);
+    }
+    public void contactCompleteDeletion(int userNo) { mapper.contactCompleteDeletion(userNo);}
+    @Override
+    public List<ContactDTO> deleteAllList() { return  mapper.deleteAll(); }
+
 }

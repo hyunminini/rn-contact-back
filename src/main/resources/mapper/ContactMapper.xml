@@ -5,6 +5,43 @@
 <mapper namespace="com.example.ContactAppBack.mapper.ContactMapper">
     <select id="selectAll" resultType="com.example.ContactAppBack.domain.ContactDTO">
         select *
-        from user
+        from t_users
+        WHERE status IS NULL
+        ORDER BY createTime DESC;
+    </select>
+
+    <insert id="contactInsert" parameterType="com.example.ContactAppBack.domain.ContactDTO">
+        INSERT INTO T_USERS(phoneNumber, name, email)
+        VALUES (#{phoneNumber}, #{name}, #{email})
+    </insert>
+
+    <update id="contactUpdate" parameterType="com.example.ContactAppBack.domain.ContactDTO">
+        UPDATE T_USERS
+        SET name = #{name}, phoneNumber = #{phoneNumber}, email = #{email}
+        WHERE userNo = #{userNo}
+    </update>
+
+    <update id="contactDelete" parameterType="com.example.ContactAppBack.domain.ContactDTO">
+        UPDATE T_USERS
+        SET name = #{name}, phoneNumber = #{phoneNumber}, email = #{email}, status = "F", deleteIp = #{deleteIp}
+        WHERE userNo = #{userNo}
+    </update>
+
+    <update id="contactRestoration" parameterType="com.example.ContactAppBack.domain.ContactDTO">
+        UPDATE T_USERS
+        SET status = NULL
+        WHERE userNo = #{userNo}
+    </update>
+
+    <select id="deleteAll" resultType="com.example.ContactAppBack.domain.ContactDTO">
+        select *
+        from t_users
+        WHERE status = "F"
+        ORDER BY deleteTime DESC;
+    </select>
+
+    <select id="contactCompleteDeletion" resultType="com.example.ContactAppBack.domain.ContactDTO">
+        DELETE FROM t_users
+        WHERE userNo = #{userNo}
     </select>
 </mapper>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ContactAppBack.mapper.DetailMapper">
+    <select id="detailAll" resultType="com.example.ContactAppBack.domain.DetailDTO">
+        SELECT *
+        FROM T_DETAIL
+        WHERE userNo = #{userNo}
+        AND classification IS NULL
+<!--        ORDER BY detailCreateTime DESC;-->
+    </select>
+    <select id="companyAll" resultType="com.example.ContactAppBack.domain.DetailDTO">
+        SELECT *
+        FROM T_DETAIL
+        WHERE userNo = #{userNo}
+        AND content IS NULL
+        AND classification = "company"
+<!--        ORDER BY detailCreateTime DESC;-->
+    </select>
+    <select id="companyDetailAll" resultType="com.example.ContactAppBack.domain.DetailDTO">
+        SELECT *
+        FROM T_DETAIL
+        WHERE companyName = #{companyName}
+        AND userNo = #{userNo}
+        AND content IS NOT NULL
+        AND classification = 'company';
+        <!--        ORDER BY detailCreateTime DESC;-->
+    </select>
+
+    <insert id="detailInsert" parameterType="com.example.ContactAppBack.domain.DetailDTO">
+        INSERT INTO T_DETAIL(userNo, title, content, classification)
+        VALUES (#{userNo}, #{title}, #{content}, #{classification})
+    </insert>
+
+    <insert id="companyInsert" parameterType="com.example.ContactAppBack.domain.DetailDTO">
+        INSERT INTO T_DETAIL (userNo, title, companyName, classification)
+        SELECT #{userNo}, #{title}, #{companyName}, #{classification}
+        FROM DUAL WHERE NOT EXISTS(
+        SELECT *
+        FROM T_DETAIL
+        WHERE companyName = #{companyName}
+        AND userNo = #{userNo}
+        );
+    </insert>
+
+    <insert id="companyDetailInsert" parameterType="com.example.ContactAppBack.domain.DetailDTO">
+        INSERT INTO T_DETAIL(userNo, companyName, title, content, classification)
+        VALUES (#{userNo}, #{companyName}, #{title}, #{content}, #{classification})
+    </insert>
+
+    <update id="detailUpdate" parameterType="com.example.ContactAppBack.domain.DetailDTO">
+        UPDATE T_DETAIL
+        SET title = #{title}, content = #{content}, companyName = #{companyName}
+        WHERE detailNo = #{detailNo}
+    </update>
+
+    <select id="detailCompleteDeletion" resultType="com.example.ContactAppBack.domain.DetailDTO">
+        DELETE FROM t_detail
+        WHERE detailNo = #{detailNo}
+    </select>
+
+    <select id="companyDetailDeletion" resultType="com.example.ContactAppBack.domain.DetailDTO">
+        DELETE FROM t_detail
+        WHERE detailNo = #{detailNo}
+    </select>
+</mapper>
